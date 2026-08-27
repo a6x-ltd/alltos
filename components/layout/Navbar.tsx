@@ -70,7 +70,7 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className={`sticky top-0 z-50 transition-all duration-300 ${
+      <nav className={`sticky top-0 z-50 transition-all duration-300 uppercase ${
         isScrolled ? 'bg-white/95 backdrop-blur-md shadow-sm' : 'bg-white/80 backdrop-blur-sm'
       } border-b border-[#eae8e2]`}>
         <div className="container-custom flex items-center justify-between h-16 md:h-20">
@@ -86,7 +86,7 @@ export default function Navbar() {
               <Link
                 key={link.href}
                 href={link.href}
-                className={`domaine hover:text-[#1f3b2c] transition ${
+                className={`domaine  hover:text-[#1f3b2c] transition ${
                   pathname === link.href ? 'text-[#1f3b2c] font-semibold' : ''
                 }`}
               >
@@ -98,7 +98,7 @@ export default function Navbar() {
             <div className="relative" ref={dropdownRef}>
               <button
                 onClick={() => setIsProductsDropdownOpen(!isProductsDropdownOpen)}
-                className={`domaine flex items-center cursor-pointer gap-1 hover:text-[#1f3b2c] transition ${
+                className={`domaine uppercase flex items-center cursor-pointer gap-1 hover:text-[#1f3b2c] transition ${
                   isProductsActive ? 'text-[#1f3b2c] font-semibold' : ''
                 }`}
                 aria-expanded={isProductsDropdownOpen}
