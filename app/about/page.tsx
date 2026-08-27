@@ -42,7 +42,7 @@ export default function AboutPage() {
       {/* Hero */}
       <section className="relative min-h-[60vh] md:min-h-[75vh] overflow-hidden">
         <Image
-          src="/images/wellness.jpg"
+          src="/images/yoga.jpg"
           alt="The team behind the brand"
           fill
           priority
@@ -87,7 +87,7 @@ export default function AboutPage() {
       <section className="py-20 md:py-28 px-6 md:px-12">
         <div className="grid md:grid-cols-2 gap-10 md:gap-16 items-center max-w-6xl mx-auto">
           <div className="relative aspect-[4/5] rounded-2xl overflow-hidden order-2 md:order-1">
-            <Image src="/images/wellness.jpg" alt="Formulation lab" fill className="object-cover" />
+            <Image src="/images/pill-stash.jpg" alt="Formulation lab" fill className="object-cover" />
           </div>
           <div className="order-1 md:order-2">
             <span className="text-xs font-semibold uppercase tracking-[0.2em] text-black/50">
@@ -133,7 +133,7 @@ export default function AboutPage() {
 
       {/* CTA banner */}
       <section className="relative py-24 md:py-32 px-6 md:px-12 overflow-hidden">
-        <Image src="/images/wellness.jpg" alt="" fill className="object-cover" aria-hidden="true" />
+        <Image src="/images/old-couple.jpg" alt="" fill className="object-cover" aria-hidden="true" />
         <div className="absolute inset-0 bg-black/70" />
         <div className="relative max-w-xl">
           <h2 className="font-[family-name:var(--font-display)] uppercase text-white text-4xl md:text-5xl leading-[0.9]">
