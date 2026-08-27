@@ -9,7 +9,7 @@ import { ArrowRight } from 'lucide-react';
 import ProductCard from '@/components/ui/ProductCard';
 import { products } from '@/utils/data';
 import { Product } from '@/types';
-import localFont from 'next/font/local';
+
 
 
 
@@ -42,10 +42,7 @@ export default function HomePage() {
 
   return (
     <div className={`${anton.variable} ${inter.variable} font-[family-name:var(--font-body)] bg-white text-black`}>
-      {/* Utility bar */}
-      {/* <div className="bg-black text-white text-center py-2.5 text-[11px] tracking-[0.15em] uppercase font-medium">
-        Free UK delivery over £30 · Free returns within 30 days
-      </div> */}
+      
 
       {/* Hero */}
       <section className="relative min-h-[80vh] md:min-h-[92vh] overflow-hidden">
