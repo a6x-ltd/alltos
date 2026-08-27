@@ -1,0 +1,27 @@
+@font-face {
+    font-family: 'Back2summer';
+    src: url('Back2summer-Regular.woff2') format('woff2'),
+        url('Back2summer-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Aero';
+    src: url('Aero.woff2') format('woff2'),
+        url('Aero.woff') format('woff');
+    font-weight: 500;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Nouvelle Vague';
+    src: url('NouvelleVague.woff2') format('woff2'),
+        url('NouvelleVague.woff') format('woff');
+    font-weight: 900;
+    font-style: normal;
+    font-display: swap;
+}
+

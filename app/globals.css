@@ -1,0 +1,211 @@
+/* app/globals.css */
+@import "tailwindcss";
+
+@layer base {
+  * {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+  
+  body {
+    background: #fafaf8;
+    color: #2c2b28;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+@layer components {
+  .container-custom {
+    max-width: 80rem;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  
+  @media (min-width: 640px) {
+    .container-custom {
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .container-custom {
+      padding-left: 2rem;
+      padding-right: 2rem;
+    }
+  }
+  
+  .section-pad {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+  }
+  
+  @media (min-width: 768px) {
+    .section-pad {
+      padding-top: 4rem;
+      padding-bottom: 4rem;
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .section-pad {
+      padding-top: 5rem;
+      padding-bottom: 5rem;
+    }
+  }
+  
+  .product-grid {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 1.5rem;
+  }
+  
+  @media (min-width: 640px) {
+    .product-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .product-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  
+  @media (min-width: 1280px) {
+    .product-grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+  
+  .btn-primary {
+    background-color: #1f3b2c;
+    color: white;
+    border-radius: 9999px;
+    font-weight: 500;
+    transition-property: all;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms;
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  }
+  
+  .btn-primary:hover {
+    background-color: #2a4f3a;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  }
+  
+  .card-hover {
+    transition-property: all;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 200ms;
+  }
+  
+  .card-hover:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 30px -12px rgba(0, 0, 0, 0.08);
+  }
+}
+
+@layer utilities {
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}
+
+@layer utilities {
+  @supports (color: color-mix(in lab, red, red)) {
+    .bg-white\/80 {
+      background-color: #ead6c8;
+    }
+  }
+}
+
+@layer utilities {
+  .text-white {
+    color: #ead6c8;
+  }
+}
+
+@layer utilities {
+  .text-black {
+    color: var(--color-black);
+  }
+}
+
+@font-face {
+  font-family: 'Back2Summer';
+  src: url('/fonts/Back2Summer.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+
+}
+
+.back2summer-heading {
+  font-family: 'Back2Summer', sans-serif;
+  font-size: 2rem;
+  text-transform: lowercase;
+}
+
+@font-face {
+  font-family: 'Aero';
+  src: url('/fonts/Aero.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.aero {
+  font-family: 'Aero', sans-serif;
+ text-transform: uppercase;
+}
+
+@font-face {
+  font-family: 'HighEmpathy';
+  src: url('/fonts/HighEmpathy.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.high-empathy {
+  font-family: 'HighEmpathy', sans-serif;
+  font-size: 2rem;
+}
+
+@font-face {
+  font-family: 'NouvelleVague';
+  src: url('/fonts/NouvelleVague.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.nouvelle-vague {
+  font-family: 'NouvelleVague', sans-serif;
+  font-size: 1.5rem;
+}
+
+
+
+/* Add to globals.css */
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.mobile-menu-open {
+  animation: slideIn 0.3s ease-out;
+}
+
+/* Prevent scroll when menu is open */
+.no-scroll {
+  overflow: hidden;
+}
