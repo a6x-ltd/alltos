@@ -12,7 +12,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Brand Section */}
           <div className="col-span-1 lg:col-span-1">
-            <h3 className="text-2xl font-semibold text-[#1f3b2c]">ALLTHOS</h3>
+            <h3 className="text-2xl font-semibold text-[#1f3b2c]">ALLTOS</h3>
             <p className="text-sm text-[#5f5d57] mt-2 max-w-xs">
               Premium supplements &amp; OTC essentials — crafted for the modern self.
             </p>
@@ -82,7 +82,7 @@ export default function Footer() {
       <div className="border-t border-[#eae8e2] py-6">
         <div className="container-custom flex flex-col sm:flex-row justify-between items-center gap-4 text-sm text-[#5f5d57]">
           <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4">
-            <span className="font-medium text-[#1f3b2c]">ALLTHOS © {currentYear} · UK</span>
+            <span className="font-medium text-[#1f3b2c]">ALLTOS © {currentYear} · UK</span>
             <span className="hidden sm:inline">|</span>
             <span>site design by  <a href='http://www.a6x.co'>A6X LTD</a></span>
           </div>

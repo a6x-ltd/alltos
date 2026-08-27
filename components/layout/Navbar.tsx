@@ -72,11 +72,11 @@ export default function Navbar() {
     <>
       <nav className={`sticky top-0 z-50 transition-all duration-300 uppercase ${
         isScrolled ? 'bg-white/95 backdrop-blur-md shadow-sm' : 'bg-white/80 backdrop-blur-sm'
-      } border-b border-[#eae8e2]`}>
+      } `}>
         <div className="container-custom flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
           <Link href="/" className="text-xl md:text-2xl font-semibold tracking-tight text-[#1f3b2c] group flex-shrink-0">
-            ALLTHOS
+            ALLTOS
             <span className="text-xs md:text-sm font-normal text-[#5f5d57] ml-1 group-hover:text-[#1f3b2c] transition">.uk</span>
           </Link>
 
