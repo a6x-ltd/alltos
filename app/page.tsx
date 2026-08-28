@@ -41,7 +41,7 @@ export default function HomePage() {
   };
 
   return (
-    <div className={`${anton.variable} ${inter.variable} font-[family-name:var(--font-body)] bg-white text-black`}>
+    <div className={`${anton.variable} ${inter.variable} font-(family-name:--font-body) bg-white text-black`}>
       
 
       {/* Hero */}
@@ -53,11 +53,11 @@ export default function HomePage() {
           priority
           className="object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" />
+        <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/10 to-transparent" />
 
         <div className="relative h-full min-h-[80vh] md:min-h-[92vh] flex flex-col justify-end px-6 md:px-12 pb-14 md:pb-20">
          
-          <h1 className="font-[family-name:var(--font-display)] mb-3 uppercase text-white leading-[0.85] text-[3rem] sm:text-[4.5rem] md:text-[6.5rem]">
+          <h1 className="font-(family-name:--font-display) mb-3 uppercase text-white leading-[0.85] text-[3rem] sm:text-[4.5rem] md:text-[6.5rem]">
             Fuel your
             <br />
             vitality.
@@ -98,7 +98,7 @@ export default function HomePage() {
 
       {/* Shop by category */}
       <section className="py-14 md:py-20 px-6 md:px-12">
-        <h2 className="font-[family-name:var(--font-display)] uppercase text-2xl md:text-3xl mb-6">
+        <h2 className="font-(family-name:--font-display) uppercase text-2xl md:text-3xl mb-6">
           Shop by category
         </h2>
 
@@ -109,7 +109,7 @@ export default function HomePage() {
               href={href}
               className={`group relative overflow-hidden bg-black ${
                 large
-                  ? 'lg:col-span-2 lg:row-span-2 aspect-[4/5] sm:aspect-square lg:aspect-auto'
+                  ? 'lg:col-span-2 lg:row-span-2 aspect-4/5 sm:aspect-square lg:aspect-auto'
                   : 'aspect-square'
               }`}
             >
@@ -119,9 +119,9 @@ export default function HomePage() {
                 fill
                 className="object-cover opacity-90 transition duration-500 group-hover:scale-105 group-hover:opacity-100"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/0 to-transparent" />
+              <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/0 to-transparent" />
               <div className="absolute bottom-4 left-4 md:bottom-6 md:left-6">
-                <p className="text-white font-[family-name:var(--font-display)] uppercase text-xl md:text-2xl">
+                <p className="text-white font-(family-name:--font-display) uppercase text-xl md:text-2xl">
                   {label}
                 </p>
                 <span className="inline-flex items-center gap-1.5 text-white text-xs font-semibold uppercase tracking-wide mt-1 opacity-0 -translate-x-1 transition group-hover:opacity-100 group-hover:translate-x-0">
@@ -137,7 +137,7 @@ export default function HomePage() {
       {/* Featured products */}
       <section className="py-14 md:py-20 px-6 md:px-12" id="featured">
         <div className="flex items-end justify-between mb-6 md:mb-8">
-          <h2 className="font-[family-name:var(--font-display)] uppercase text-2xl md:text-3xl">
+          <h2 className="font-(family-name:--font-display) uppercase text-2xl md:text-3xl">
             Bestsellers
           </h2>
           <Link
@@ -175,7 +175,7 @@ export default function HomePage() {
         />
         <div className="absolute inset-0 bg-black/70" />
         <div className="relative max-w-xl">
-          <h2 className="font-[family-name:var(--font-display)] uppercase text-white text-4xl md:text-5xl leading-[0.9]">
+          <h2 className="font-(family-name:--font-display) uppercase text-white text-4xl md:text-5xl leading-[0.9]">
             Members get more.
           </h2>
           <p className="text-white/80 text-sm md:text-base mt-4">
