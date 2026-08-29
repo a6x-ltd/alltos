@@ -1,0 +1,261 @@
+// prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ── Enums ─────────────────────────────────────────────
+
+enum Role {
+  CUSTOMER
+  ADMIN
+}
+
+enum ProductCategory {
+  SUPPLEMENT
+  OTC
+  VITAMIN
+}
+
+enum ProductBadge {
+  NEW
+  BESTSELLER
+  SALE
+}
+
+enum OrderStatus {
+  PENDING_PAYMENT
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
+enum PaymentMethod {
+  CARD
+  PAYPAL
+  KLARNA
+}
+
+enum PaymentStatus {
+  PENDING
+  SUCCEEDED
+  FAILED
+  REFUNDED
+}
+
+enum DiscountType {
+  PERCENTAGE
+  FIXED
+}
+
+// ── Core entities ─────────────────────────────────────
+
+model User {
+  id            String   @id @default(cuid())
+  email         String   @unique
+  passwordHash  String
+  firstName     String
+  lastName      String
+  role          Role     @default(CUSTOMER)
+
+  emailVerified Boolean  @default(false)
+  verifyToken   String?  @unique
+  verifyTokenExpiresAt DateTime?
+
+  twoFactorEnabled Boolean @default(false)
+  twoFactorSecret  String?
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  addresses     Address[]
+  cart          Cart?
+  wishlist      Wishlist?
+  orders        Order[]
+  sessions      Session[]
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+}
+
+model Address {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  label     String?  // e.g. "Home", "Work"
+  firstName String
+  lastName  String
+  email     String
+  address   String
+  city      String
+  postcode  String
+  country   String   @default("United Kingdom")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  orders    Order[]
+}
+
+model Product {
+  id          String           @id @default(cuid())
+  sku         String           @unique
+  name        String
+  slug        String           @unique
+  description String
+  image       String
+  category    ProductCategory
+  badge       ProductBadge?
+
+  price       Decimal          @db.Decimal(10, 2)
+  salePrice   Decimal?         @db.Decimal(10, 2)
+
+  stock       Int              @default(0)
+  rating      Decimal          @default(0) @db.Decimal(2, 1)
+  reviewCount Int              @default(0)
+
+  status      String           @default("active") // active | archived
+
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  cartItems     CartItem[]
+  wishlistItems WishlistItem[]
+  orderItems    OrderItem[]
+}
+
+model Cart {
+  id        String     @id @default(cuid())
+  userId    String?    @unique
+  user      User?      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  sessionId String?    @unique // for guest carts, before login
+
+  items     CartItem[]
+
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+}
+
+model CartItem {
+  id        String   @id @default(cuid())
+  cartId    String
+  cart      Cart     @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product  @relation(fields: [productId], references: [id])
+  quantity  Int      @default(1)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([cartId, productId])
+}
+
+model Wishlist {
+  id     String         @id @default(cuid())
+  userId String         @unique
+  user   User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items  WishlistItem[]
+}
+
+model WishlistItem {
+  id         String   @id @default(cuid())
+  wishlistId String
+  wishlist   Wishlist @relation(fields: [wishlistId], references: [id], onDelete: Cascade)
+  productId  String
+  product    Product  @relation(fields: [productId], references: [id])
+  createdAt  DateTime @default(now())
+
+  @@unique([wishlistId, productId])
+}
+
+model Order {
+  id             String        @id @default(cuid())
+  orderNumber    String        @unique // e.g. "WB-10482"
+
+  userId         String?
+  user           User?         @relation(fields: [userId], references: [id])
+  guestEmail     String?       // for guest checkout
+
+  addressId      String?
+  address        Address?      @relation(fields: [addressId], references: [id])
+  // Snapshot the shipping address at time of order too, in case Address is edited/deleted later
+  shippingSnapshot Json
+
+  status         OrderStatus   @default(PENDING_PAYMENT)
+
+  subtotal       Decimal       @db.Decimal(10, 2)
+  shipping       Decimal       @db.Decimal(10, 2)
+  vat            Decimal       @db.Decimal(10, 2)
+  discountAmount Decimal       @default(0) @db.Decimal(10, 2)
+  total          Decimal       @db.Decimal(10, 2)
+
+  discountCode   String?
+
+  items          OrderItem[]
+  payment        Payment?
+
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+}
+
+model OrderItem {
+  id          String   @id @default(cuid())
+  orderId     String
+  order       Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId   String
+  product     Product  @relation(fields: [productId], references: [id])
+
+  // Snapshot at time of purchase — must not change if Product changes later
+  productName String
+  unitPrice   Decimal  @db.Decimal(10, 2)
+  quantity    Int
+}
+
+model Payment {
+  id              String        @id @default(cuid())
+  orderId         String        @unique
+  order           Order         @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  method          PaymentMethod
+  status          PaymentStatus @default(PENDING)
+  provider        String        @default("stripe")
+  providerRef     String?       // Stripe PaymentIntent ID etc.
+  amount          Decimal       @db.Decimal(10, 2)
+
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+}
+
+model Discount {
+  id        String       @id @default(cuid())
+  code      String       @unique
+  type      DiscountType
+  value     Decimal      @db.Decimal(10, 2) // percentage (e.g. 10) or fixed amount (e.g. 5.00)
+  active    Boolean      @default(true)
+  usedCount Int          @default(0)
+
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+}
+
+model StoreSettings {
+  id                 String  @id @default(cuid())
+  storeName          String  @default("ALLTOS")
+  supportEmail       String  @default("hello@alltos.co.uk")
+  orderAlerts        Boolean @default(true)
+  lowStockAlerts     Boolean @default(true)
+  marketingEmails    Boolean @default(false)
+}
