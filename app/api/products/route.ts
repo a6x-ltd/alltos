@@ -1,6 +1,7 @@
 // app/api/products/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import type { Prisma } from "@/app/generated/prisma/client";
 import { serializeProduct } from "@/lib/api/serializeProduct";
 
 const CATEGORY_REVERSE_MAP: Record<string, "SUPPLEMENT" | "OTC" | "VITAMIN"> = {
@@ -14,7 +15,7 @@ export async function GET(req: NextRequest) {
   const categoryParam = searchParams.get("category");
   const search = searchParams.get("search");
 
-  const where: any = { status: "active" };
+  const where: Prisma.ProductWhereInput = { status: "active" };
 
   if (categoryParam && CATEGORY_REVERSE_MAP[categoryParam]) {
     where.category = CATEGORY_REVERSE_MAP[categoryParam];

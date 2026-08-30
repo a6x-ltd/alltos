@@ -56,7 +56,7 @@ const CATEGORIES = [
 ];
 
 export default function HomePage() {
-  const [featuredProducts, setFeaturedProducts] = useState<any[]>([]);
+  const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
   const [activeSlide, setActiveSlide] = useState(0);
 
   useEffect(() => {
@@ -187,7 +187,7 @@ export default function HomePage() {
                 </span>
               )}
               <div className="bg-[#F5F5F5] rounded-2xl overflow-hidden">
-                <ProductCard product={product} onAddToCart={handleAddToCart} />
+                <ProductCard product={product} />
               </div>
             </div>
           ))}

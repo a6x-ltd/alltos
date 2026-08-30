@@ -108,7 +108,7 @@ export default function SalePage() {
                   -{Math.round(MOCK_DISCOUNT * 100)}%
                 </span>
                 <div className="bg-[#F5F5F5] rounded-2xl overflow-hidden">
-                  <ProductCard product={product} onAddToCart={handleAddToCart} />
+                  <ProductCard product={product} />
                 </div>
                 {/* ProductCard renders the base price internally — this line
                     surfaces the discounted price alongside it until Product

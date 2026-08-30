@@ -86,7 +86,7 @@ export default function NewArrivalsPage() {
                   New
                 </span>
                 <div className="bg-[#F5F5F5] rounded-2xl overflow-hidden">
-                  <ProductCard product={product} onAddToCart={handleAddToCart} />
+                  <ProductCard product={product} />
                 </div>
               </div>
             ))}

@@ -25,6 +25,7 @@ export default function Navbar() {
 
   // Close menu when route changes
   useEffect(() => {
+  // eslint-disable-next-line react-hooks/set-state-in-effect -- intentional: reset transient UI state on navigation
     setIsMenuOpen(false);
     setIsProductsDropdownOpen(false);
     setIsMobileShopOpen(false);
