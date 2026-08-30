@@ -10,6 +10,8 @@ import {
   Settings,
   LogOut,
   ChevronRight,
+  Plus,
+  Trash2,
 } from "lucide-react";
 import { formatCurrency } from "@/utils/currency";
 
@@ -71,6 +73,18 @@ type SessionUser = {
   role: string;
 };
 
+type Address = {
+  id: string;
+  label: string | null;
+  firstName: string;
+  lastName: string;
+  email: string;
+  address: string;
+  city: string;
+  postcode: string;
+  country: string;
+};
+
 type SessionStatus = "loading" | "anon" | "authed";
 type AuthView = "login" | "register" | "check-email";
 
@@ -79,6 +93,9 @@ export default function AccountPage() {
   const [sessionStatus, setSessionStatus] = useState<SessionStatus>("loading");
   const [user, setUser] = useState<SessionUser | null>(null);
   const [authView, setAuthView] = useState<AuthView>("login");
+
+  const [addresses, setAddresses] = useState<Address[]>([]);
+  const [addressesLoaded, setAddressesLoaded] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -101,12 +118,51 @@ export default function AccountPage() {
     };
   }, []);
 
+  useEffect(() => {
+    if (sessionStatus !== "authed") return;
+    let cancelled = false;
+    fetch("/api/account/addresses")
+      .then((res) => res.json())
+      .then((data) => {
+        if (cancelled) return;
+        setAddresses(data.addresses || []);
+        setAddressesLoaded(true);
+      })
+      .catch(() => {
+        if (!cancelled) setAddressesLoaded(true);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [sessionStatus]);
+
   async function handleSignOut() {
     await fetch("/api/auth/logout", { method: "POST" }).catch(() => {});
     setUser(null);
     setSessionStatus("anon");
     setAuthView("login");
     setActiveTab("overview");
+    setAddresses([]);
+    setAddressesLoaded(false);
+  }
+
+  async function handleDeleteAddress(id: string) {
+    const previous = addresses;
+    setAddresses((prev) => prev.filter((a) => a.id !== id));
+    try {
+      const res = await fetch(`/api/account/addresses/${id}`, {
+        method: "DELETE",
+      });
+      if (!res.ok) {
+        setAddresses(previous);
+      }
+    } catch {
+      setAddresses(previous);
+    }
+  }
+
+  function handleAddressAdded(address: Address) {
+    setAddresses((prev) => [...prev, address]);
   }
 
   if (sessionStatus === "loading") {
@@ -178,8 +234,11 @@ export default function AccountPage() {
             <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
               {[
                 { label: "Total orders", value: ORDERS.length, icon: Package },
-                { label: "Reward points", value: "340", icon: Heart },
-                { label: "Saved addresses", value: "2", icon: MapPin },
+                {
+                  label: "Saved addresses",
+                  value: addressesLoaded ? addresses.length : "–",
+                  icon: MapPin,
+                },
               ].map(({ label, value, icon: Icon }) => (
                 <div
                   key={label}
@@ -259,26 +318,12 @@ export default function AccountPage() {
         )}
 
         {activeTab === "addresses" && (
-          <div className="mt-8 grid sm:grid-cols-2 gap-4">
-            {["Home", "Work"].map((label) => (
-              <div
-                key={label}
-                className="border border-black/10 rounded-2xl p-5"
-              >
-                <div className="flex items-center gap-2 mb-2">
-                  <MapPin className="w-4 h-4 text-black/40" />
-                  <span className="text-sm font-semibold">{label}</span>
-                </div>
-                <p className="text-sm text-black/60 leading-relaxed">
-                  123 Example Street
-                  <br />
-                  London, EC1A 1AA
-                  <br />
-                  United Kingdom
-                </p>
-              </div>
-            ))}
-          </div>
+          <AddressesTab
+            addresses={addresses}
+            loaded={addressesLoaded}
+            onDelete={handleDeleteAddress}
+            onAdded={handleAddressAdded}
+          />
         )}
 
         {activeTab === "settings" && (
@@ -299,6 +344,228 @@ export default function AccountPage() {
         )}
       </div>
     </div>
+  );
+}
+
+function AddressesTab({
+  addresses,
+  loaded,
+  onDelete,
+  onAdded,
+}: {
+  addresses: Address[];
+  loaded: boolean;
+  onDelete: (id: string) => void;
+  onAdded: (address: Address) => void;
+}) {
+  const [showForm, setShowForm] = useState(false);
+
+  if (!loaded) {
+    return <div className="mt-8 text-sm text-black/50">Loading addresses…</div>;
+  }
+
+  return (
+    <div className="mt-8 space-y-6">
+      <div className="grid sm:grid-cols-2 gap-4">
+        {addresses.length === 0 && !showForm && (
+          <p className="text-sm text-black/50 sm:col-span-2">
+            No saved addresses yet.
+          </p>
+        )}
+        {addresses.map((addr) => (
+          <div
+            key={addr.id}
+            className="border border-black/10 rounded-2xl p-5 relative"
+          >
+            <button
+              type="button"
+              onClick={() => onDelete(addr.id)}
+              aria-label="Delete address"
+              className="absolute top-4 right-4 text-black/30 hover:text-red-600 transition"
+            >
+              <Trash2 className="w-4 h-4" />
+            </button>
+            <div className="flex items-center gap-2 mb-2">
+              <MapPin className="w-4 h-4 text-black/40" />
+              <span className="text-sm font-semibold">
+                {addr.label || "Address"}
+              </span>
+            </div>
+            <p className="text-sm text-black/60 leading-relaxed pr-6">
+              {addr.firstName} {addr.lastName}
+              <br />
+              {addr.address}
+              <br />
+              {addr.city}, {addr.postcode}
+              <br />
+              {addr.country}
+            </p>
+          </div>
+        ))}
+      </div>
+
+      {showForm ? (
+        <NewAddressForm
+          onCancel={() => setShowForm(false)}
+          onSaved={(addr) => {
+            onAdded(addr);
+            setShowForm(false);
+          }}
+        />
+      ) : (
+        <button
+          type="button"
+          onClick={() => setShowForm(true)}
+          className="inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-wide border border-black/15 rounded-full px-5 py-2.5 hover:bg-black hover:text-white transition"
+        >
+          <Plus className="w-4 h-4" />
+          Add address
+        </button>
+      )}
+    </div>
+  );
+}
+
+function NewAddressForm({
+  onCancel,
+  onSaved,
+}: {
+  onCancel: () => void;
+  onSaved: (address: Address) => void;
+}) {
+  const [label, setLabel] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [address, setAddress] = useState("");
+  const [city, setCity] = useState("");
+  const [postcode, setPostcode] = useState("");
+  const [country, setCountry] = useState("United Kingdom");
+  const [error, setError] = useState<string | null>(null);
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string[]>>({});
+  const [submitting, setSubmitting] = useState(false);
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setError(null);
+    setFieldErrors({});
+    setSubmitting(true);
+    try {
+      const res = await fetch("/api/account/addresses", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          label: label || undefined,
+          firstName,
+          lastName,
+          email,
+          address,
+          city,
+          postcode,
+          country,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setError(data.error || "Something went wrong. Please try again.");
+        setFieldErrors(data.details || {});
+        return;
+      }
+      onSaved(data.address);
+    } catch {
+      setError("Network error. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
+  return (
+    <form
+      onSubmit={handleSubmit}
+      className="border border-black/10 rounded-2xl p-5 max-w-lg space-y-4"
+    >
+      {error && (
+        <p className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg px-4 py-3">
+          {error}
+        </p>
+      )}
+      <Field
+        label="Label (optional)"
+        value={label}
+        onChange={setLabel}
+        errors={fieldErrors.label}
+      />
+      <div className="grid grid-cols-2 gap-3">
+        <Field
+          label="First name"
+          value={firstName}
+          onChange={setFirstName}
+          required
+          errors={fieldErrors.firstName}
+        />
+        <Field
+          label="Last name"
+          value={lastName}
+          onChange={setLastName}
+          required
+          errors={fieldErrors.lastName}
+        />
+      </div>
+      <Field
+        label="Email"
+        type="email"
+        value={email}
+        onChange={setEmail}
+        required
+        errors={fieldErrors.email}
+      />
+      <Field
+        label="Address"
+        value={address}
+        onChange={setAddress}
+        required
+        errors={fieldErrors.address}
+      />
+      <div className="grid grid-cols-2 gap-3">
+        <Field
+          label="City"
+          value={city}
+          onChange={setCity}
+          required
+          errors={fieldErrors.city}
+        />
+        <Field
+          label="Postcode"
+          value={postcode}
+          onChange={setPostcode}
+          required
+          errors={fieldErrors.postcode}
+        />
+      </div>
+      <Field
+        label="Country"
+        value={country}
+        onChange={setCountry}
+        required
+        errors={fieldErrors.country}
+      />
+      <div className="flex gap-3">
+        <button
+          type="submit"
+          disabled={submitting}
+          className="bg-black text-white rounded-full px-6 py-2.5 text-sm font-semibold uppercase tracking-wide disabled:opacity-50"
+        >
+          {submitting ? "Saving…" : "Save address"}
+        </button>
+        <button
+          type="button"
+          onClick={onCancel}
+          className="text-sm font-semibold uppercase tracking-wide text-black/50 hover:text-black transition"
+        >
+          Cancel
+        </button>
+      </div>
+    </form>
   );
 }
 
