@@ -2,6 +2,7 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
+import { Heart } from "lucide-react";
 import { Product } from "@/types";
 import { formatCurrency } from "@/utils/currency";
 import Button from "./Button";
@@ -14,6 +15,9 @@ export default function ProductCard({ product }: ProductCardProps) {
   const [status, setStatus] = useState<"idle" | "loading" | "added" | "error">(
     "idle",
   );
+  const [wishlistStatus, setWishlistStatus] = useState<
+    "idle" | "saved" | "error"
+  >("idle");
 
   const handleAddToCart = async () => {
     setStatus("loading");
@@ -24,6 +28,15 @@ export default function ProductCard({ product }: ProductCardProps) {
     });
     setStatus(res.ok ? "added" : "error");
     setTimeout(() => setStatus("idle"), 2000);
+  };
+
+  const handleAddToWishlist = async () => {
+    const res = await fetch("/api/wishlist", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ productId: product.id }),
+    });
+    setWishlistStatus(res.ok ? "saved" : "error");
   };
 
   return (
@@ -50,6 +63,16 @@ export default function ProductCard({ product }: ProductCardProps) {
           )}
         </div>
       </Link>
+      <button
+        type="button"
+        onClick={handleAddToWishlist}
+        aria-label={`Save ${product.name} to wishlist`}
+        className="absolute top-8 right-8 w-8 h-8 rounded-full bg-white/80 backdrop-blur-sm flex items-center justify-center hover:bg-white transition"
+      >
+        <Heart
+          className={`w-4 h-4 ${wishlistStatus === "saved" ? "text-red-600 fill-red-600" : "text-[#1f3b2c]"}`}
+        />
+      </button>
       <div className="mt-4 flex flex-col flex-grow">
         <Link
           href={`/products/${product.slug}`}
