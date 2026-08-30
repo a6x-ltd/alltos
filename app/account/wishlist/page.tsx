@@ -20,7 +20,7 @@ export default function WishlistPage() {
   // Seeded from product data for this preview — replace with real saved-items state.
   const [wishlist, setWishlist] = useState<Product[]>(products.slice(1, 4));
 
-  const removeItem = (id: number) => {
+  const removeItem = (id: string) => {
     setWishlist((prev) => prev.filter((p) => p.id !== id));
   };
 

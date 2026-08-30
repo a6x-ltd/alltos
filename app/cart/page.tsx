@@ -19,7 +19,7 @@ const inter = Inter({
 });
 
 interface CartLine {
-  id: number;
+  id: string;
   name: string;
   category: string;
   price: number;
@@ -45,7 +45,7 @@ export default function CartPage() {
   const [cart, setCart] = useState<CartLine[]>(INITIAL_CART);
   const [promo, setPromo] = useState('');
 
-  const updateQuantity = (id: number, delta: number) => {
+  const updateQuantity = (id: string, delta: number) => {
     setCart((prev) =>
       prev
         .map((line) =>
@@ -54,7 +54,7 @@ export default function CartPage() {
     );
   };
 
-  const removeItem = (id: number) => {
+  const removeItem = (id: string) => {
     setCart((prev) => prev.filter((line) => line.id !== id));
   };
 

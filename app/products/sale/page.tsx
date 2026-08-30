@@ -20,7 +20,7 @@ const inter = Inter({
 // flat 20% off for preview purposes — replace with a real `salePrice` (or
 // `discountPercent`) field on Product and filter on that instead.
 const MOCK_DISCOUNT = 0.2;
-const SALE_PRODUCT_IDS = [1, 3]; // stand-in for a real "onSale" flag
+const SALE_PRODUCT_IDS = ['1', '3']; // stand-in for a real "onSale" flag
 
 interface SaleItem {
   product: Product;
