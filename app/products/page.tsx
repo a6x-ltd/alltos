@@ -3,17 +3,7 @@
 import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import ProductCard from "@/components/ui/ProductCard";
-
-interface Product {
-  id: string;
-  name: string;
-  description: string;
-  price: number;
-  image: string;
-  category: string;
-  slug: string;
-  [key: string]: any;
-}
+import { Product } from "@/types";
 
 export default function ProductsPage() {
   const searchParams = useSearchParams();
@@ -23,6 +13,7 @@ export default function ProductsPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- standard data-fetch-on-mount pattern
     setLoading(true);
     const params = new URLSearchParams();
     if (category) params.set("category", category);
@@ -33,10 +24,6 @@ export default function ProductsPage() {
       .then((data) => setProducts(data.products ?? []))
       .finally(() => setLoading(false));
   }, [category, searchTerm]);
-
-  const handleAddToCart = (product: Product) => {
-    console.log("Added to cart:", product);
-  };
 
   return (
     <section className="section-pad">
@@ -66,11 +53,7 @@ export default function ProductsPage() {
         </div>
         <div className="product-grid">
           {products.map((product) => (
-            <ProductCard
-              key={product.id}
-              product={product as any}
-              onAddToCart={handleAddToCart}
-            />
+            <ProductCard key={product.id} product={product} />
           ))}
         </div>
         {!loading && products.length === 0 && (

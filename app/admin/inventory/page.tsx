@@ -8,7 +8,7 @@ import { products as seedProducts } from '@/utils/data';
 export default function AdminInventoryPage() {
   const [inventory, setInventory] = useState(seedProducts);
 
-  const adjustStock = (id: number, delta: number) => {
+  const adjustStock = (id: string, delta: number) => {
     setInventory((prev) =>
       prev.map((p) => (p.id === id ? { ...p, stock: Math.max(0, p.stock + delta) } : p))
     );

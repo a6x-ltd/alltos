@@ -4,6 +4,7 @@ import { headers } from "next/headers";
 import { formatCurrency } from "@/utils/currency";
 import AddToCartControls from "@/components/products/AddToCartControls";
 import ProductCard from "@/components/ui/ProductCard";
+import { Product } from '@/types';
 
 interface ProductPageProps {
   params: Promise<{ slug: string }>;
@@ -33,7 +34,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
   });
   const { products: allProducts } = await relatedRes.json();
   const relatedProducts = allProducts
-    .filter((p: any) => p.id !== product.id)
+    .filter((p: Product) => p.id !== product.id)
     .slice(0, 4);
 
   return (
@@ -94,7 +95,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
               You might also like
             </h2>
             <div className="product-grid">
-              {relatedProducts.map((p: any) => (
+              {relatedProducts.map((p: Product) => (
                 <ProductCard key={p.id} product={p} />
               ))}
             </div>

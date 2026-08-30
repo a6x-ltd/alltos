@@ -7,12 +7,23 @@ import { useState, useEffect, useRef } from 'react';
 
 export default function Navbar() {
   const pathname = usePathname();
-  const [cartCount] = useState(3);
+  const [cartCount, setCartCount] = useState(0);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isProductsDropdownOpen, setIsProductsDropdownOpen] = useState(false);
   const [isMobileShopOpen, setIsMobileShopOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Fetch real cart item count, refreshed on route change
+  useEffect(() => {
+    fetch('/api/cart')
+      .then((res) => res.json())
+      .then((data) => {
+        const count = (data.items ?? []).reduce((sum: number, item: { quantity: number }) => sum + item.quantity, 0);
+        setCartCount(count);
+      })
+      .catch(() => {});
+  }, [pathname]);
 
   // Handle scroll effect
   useEffect(() => {
@@ -25,6 +36,7 @@ export default function Navbar() {
 
   // Close menu when route changes
   useEffect(() => {
+  // eslint-disable-next-line react-hooks/set-state-in-effect -- intentional: reset transient UI state on navigation
     setIsMenuOpen(false);
     setIsProductsDropdownOpen(false);
     setIsMobileShopOpen(false);
