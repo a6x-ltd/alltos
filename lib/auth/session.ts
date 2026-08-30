@@ -50,3 +50,11 @@ export async function destroySession() {
   }
   cookieStore.delete(SESSION_COOKIE_NAME);
 }
+
+export async function requireAdmin() {
+  const user = await getCurrentUser();
+  if (!user || user.role !== "ADMIN") {
+    return null;
+  }
+  return user;
+}
