@@ -39,3 +39,24 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+/app/generated/prisma
+/app/generated
+
+# Prisma agent-skills scaffolding (not part of the app)
+.agents/
+.claude/
+.windsurf/
+skills-lock.json
+
+# local inspection file, not part of the repo
+project-structure.txt
+
+# Prisma agent-skills scaffolding (not part of the app)
+.agents/
+.claude/
+.windsurf/
+skills-lock.json
+
+# local inspection file, not part of the repo
+project-structure.txt
