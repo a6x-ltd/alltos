@@ -1,4 +1,5 @@
 // app/api/auth/register/route.ts
+import { sendVerificationEmail } from "@/lib/email/sendVerificationEmail";
 import { NextRequest, NextResponse } from "next/server";
 import { hash } from "@node-rs/argon2";
 import { prisma } from "@/lib/prisma";
@@ -53,10 +54,7 @@ export async function POST(req: NextRequest) {
     },
   });
 
-  // TODO (Step 3): send real verification email via Resend
-  console.log(
-    `[DEV] Verification link: ${process.env.APP_URL}/verify-email?token=${verifyToken}`,
-  );
+  await sendVerificationEmail(user.email, user.firstName, verifyToken);
 
   return NextResponse.json(
     {
