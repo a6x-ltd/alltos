@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint"
+    "postinstall": "prisma generate --config prisma7.config.ts"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^7.3.1",
