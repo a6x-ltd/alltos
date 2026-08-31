@@ -1,30 +1,27 @@
 // app/products/page.tsx
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import ProductCard from "@/components/ui/ProductCard";
 import { Product } from "@/types";
 
-export default function ProductsPage() {
+function ProductsContent() {
   const searchParams = useSearchParams();
   const category = searchParams.get("category");
   const [searchTerm, setSearchTerm] = useState("");
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
-
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect -- standard data-fetch-on-mount pattern
     setLoading(true);
     const params = new URLSearchParams();
     if (category) params.set("category", category);
     if (searchTerm.trim()) params.set("search", searchTerm.trim());
-
     fetch(`/api/products?${params.toString()}`)
       .then((res) => res.json())
       .then((data) => setProducts(data.products ?? []))
       .finally(() => setLoading(false));
   }, [category, searchTerm]);
-
   return (
     <section className="section-pad">
       <div className="container-custom">
@@ -65,5 +62,13 @@ export default function ProductsPage() {
         )}
       </div>
     </section>
+  );
+}
+
+export default function ProductsPage() {
+  return (
+    <Suspense fallback={null}>
+      <ProductsContent />
+    </Suspense>
   );
 }
