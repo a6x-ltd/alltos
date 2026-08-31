@@ -2,6 +2,11 @@
 'use client';
 
 import { createContext, useContext, useState, ReactNode } from 'react';
+import { DeliveryOption } from './deliveryOptions';
+
+// Re-exported so existing imports of DELIVERY_OPTIONS from this file keep working.
+export { DELIVERY_OPTIONS } from './deliveryOptions';
+export type { DeliveryOption } from './deliveryOptions';
 
 export interface Address {
   firstName: string;
@@ -12,19 +17,6 @@ export interface Address {
   postcode: string;
   country: string;
 }
-
-export interface DeliveryOption {
-  id: string;
-  label: string;
-  description: string;
-  price: number;
-}
-
-export const DELIVERY_OPTIONS: DeliveryOption[] = [
-  { id: 'standard', label: 'Standard', description: '3–5 business days', price: 3.5 },
-  { id: 'express', label: 'Express', description: '1–2 business days', price: 6.9 },
-  { id: 'nextday', label: 'Next day', description: 'Order before 2pm today', price: 9.9 },
-];
 
 export type PaymentMethod = 'card' | 'paypal' | 'klarna';
 
