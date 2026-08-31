@@ -44,6 +44,7 @@ export default function ProductPage() {
       </div>
     );
   }
+  const { product } = await res.json();
 
   const handleQuantityChange = (newQuantity: number) => {
     setQuantity(newQuantity);
@@ -120,21 +121,30 @@ export default function ProductPage() {
                   <i className="fa-solid fa-bag-shopping mr-2"></i> Add to cart
                 </Button>
               </div>
+              <AddToCartControls productId={product.id} />
               <div className="mt-6 flex flex-wrap gap-4 text-sm text-[#5f5d57]">
-                <span><i className="fa-regular fa-truck mr-2"></i> Free UK shipping over £30</span>
-                <span><i className="fa-regular fa-clock mr-2"></i> 2‑3 day delivery</span>
-                <span><i className="fa-regular fa-credit-card mr-2"></i> Secure checkout</span>
+                <span>
+                  <i className="fa-regular fa-truck mr-2"></i> Free UK shipping
+                  over £30
+                </span>
+                <span>
+                  <i className="fa-regular fa-clock mr-2"></i> 2‑3 day delivery
+                </span>
+                <span>
+                  <i className="fa-regular fa-credit-card mr-2"></i> Secure
+                  checkout
+                </span>
               </div>
             </div>
           </div>
         </div>
-
-        {/* Related Products */}
         {relatedProducts.length > 0 && (
           <div className="mt-16">
-            <h2 className="text-2xl font-light text-[#1f3b2c] mb-6">You might also like</h2>
+            <h2 className="text-2xl font-light text-[#1f3b2c] mb-6">
+              You might also like
+            </h2>
             <div className="product-grid">
-              {relatedProducts.map((p) => (
+              {relatedProducts.map((p: Product) => (
                 <ProductCard key={p.id} product={p} />
               ))}
             </div>

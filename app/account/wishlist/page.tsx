@@ -20,7 +20,7 @@ export default function WishlistPage() {
   // Seeded from product data for this preview — replace with real saved-items state.
   const [wishlist, setWishlist] = useState<Product[]>(products.slice(1, 4));
 
-  const removeItem = (id: number) => {
+  const removeItem = (id: string) => {
     setWishlist((prev) => prev.filter((p) => p.id !== id));
   };
 
@@ -66,7 +66,7 @@ export default function WishlistPage() {
                   <Heart className="w-4 h-4 text-white fill-white" />
                 </button>
                 <div className="bg-[#F5F5F5] rounded-2xl overflow-hidden">
-                  <ProductCard product={product} onAddToCart={handleAddToCart} />
+                  <ProductCard product={product} />
                 </div>
                 <button
                   onClick={() => handleAddToCart(product)}
