@@ -199,7 +199,11 @@
   font-size: 1rem;
 }
 
-
+@layer utilities {
+  .bg-\[\#1f3b2c\] {
+    background-color: #aa6b3f;
+  }
+}
 
 /* Add to globals.css */
 @keyframes slideIn {

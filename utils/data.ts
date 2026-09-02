@@ -2,7 +2,7 @@ import { Product } from '@/types';
 
 export const products: Product[] = [
   {
-    id: 1,
+    id: '1',
     name: 'Vitamin D Complex',
     description: 'High-potency vitamin C with zinc and citrus bioflavonoids for immune support',
     price: 24.90,
@@ -15,7 +15,7 @@ export const products: Product[] = [
     slug: 'vitamin-d-complex'
   },
   {
-    id: 2,
+    id: '2',
     name: 'Omega-3 + EPA',
     description: 'Algal oil supplement with 1200mg EPA/DHA for heart and brain health',
     price: 32.50,
@@ -27,7 +27,7 @@ export const products: Product[] = [
     slug: 'omega-3-epa'
   },
   {
-    id: 3,
+    id: '3',
     name: 'Daily Probiotic',
     description: '10 clinically studied strains with 50 billion CFU for gut health',
     price: 28.90,
@@ -40,7 +40,7 @@ export const products: Product[] = [
     slug: 'daily-probiotic'
   },
   {
-    id: 4,
+    id: '4',
     name: 'Magnesium Glycinate',
     description: '400mg highly bioavailable magnesium for sleep and muscle recovery',
     price: 19.20,
@@ -57,6 +57,6 @@ export const getProductBySlug = (slug: string): Product | undefined => {
   return products.find(p => p.slug === slug);
 };
 
-export const getRelatedProducts = (productId: number, limit: number = 4): Product[] => {
+export const getRelatedProducts = (productId: string, limit: number = 4): Product[] => {
   return products.filter(p => p.id !== productId).slice(0, limit);
 };
