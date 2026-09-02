@@ -6,6 +6,7 @@ import { Heart } from "lucide-react";
 import { Product } from "@/types";
 import { formatCurrency } from "@/utils/currency";
 import Button from "./Button";
+import Image from "next/image";
 
 interface ProductCardProps {
   product: Product;
@@ -73,7 +74,7 @@ export default function ProductCard({ product }: ProductCardProps) {
           className={`w-4 h-4 ${wishlistStatus === "saved" ? "text-red-600 fill-red-600" : "text-[#1f3b2c]"}`}
         />
       </button>
-      <div className="mt-4 flex flex-col flex-grow">
+      <div className="mt-4 flex flex-col grow">
         <Link
           href={`/products/${product.slug}`}
           className="hover:opacity-80 transition"
